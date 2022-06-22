@@ -33,7 +33,7 @@ class Parser
         DB::beginTransaction();
         $processedCronJobs = $data
             ->skip(1)
-            ->mapSpread(static function ($iJob) {
+            ->map(static function ($iJob) {
                 $job = new CronJob();
 
                 $job->cron_job_id = (int)$iJob[0];
