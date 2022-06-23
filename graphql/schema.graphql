@@ -1,10 +1,11 @@
 type Query {
-    getCronJobs(orderBy: OrderByClause @orderBy): [CronJob!]! @paginate(defaultCount: 10)
+    getCronJobs(orderBy: OrderByClause @orderBy, search: String @where(operator: "like", key: "name")): [CronJob!]! @paginate(defaultCount: 10)
     getCronJobDetail(id: ID! @eq): CronJob @find
 }
 
 type CronJob {
     id: ID!
+    cron_job_id: Int!
     name: String!,
     expression: String!
     url: String!
