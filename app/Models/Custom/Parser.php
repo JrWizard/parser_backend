@@ -18,7 +18,7 @@ class Parser
      * @throws FileNotFoundException
      */
     public function __construct(
-        private string $filename
+        private readonly string $filename
     )
     {
         if (!Storage::exists($filename)) {
@@ -26,14 +26,19 @@ class Parser
         }
     }
 
+    /**
+     * @throws CronJobSaveFailed
+     */
     public function processCronJobs(): Collection
     {
         $data = collect($this->readCSV());
 
-        DB::beginTransaction();
-        $processedCronJobs = $data
+        return $data
             ->skip(1)
             ->map(static function ($iJob) {
+                if (count($iJob) !== 10) {
+                    return false;
+                }
                 $job = new CronJob();
 
                 $job->cron_job_id = (int)$iJob[0];
@@ -53,15 +58,14 @@ class Parser
                 $job->execution_time = $iJob[8];
 
                 if (!$job->save()) {
-                    DB::rollBack();
                     throw new CronJobSaveFailed();
                 }
 
                 return $job->fresh();
+            })
+            ->reject(static function ($value) {
+                return $value === false;
             });
-        DB::commit();
-
-        return $processedCronJobs;
     }
 
     private function readCSV(): array

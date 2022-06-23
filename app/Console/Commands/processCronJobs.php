@@ -2,9 +2,11 @@
 
 namespace App\Console\Commands;
 
+use App\Exceptions\CronJobSaveFailed;
 use App\Models\CronJob;
 use App\Models\Custom\Parser;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 use League\Flysystem\FileNotFoundException;
 
 class processCronJobs extends Command
@@ -21,7 +23,7 @@ class processCronJobs extends Command
      *
      * @var string
      */
-    protected $description = 'Processes CSV of CRON jobs and saves it to database.';
+    protected $description = 'Truncates table, processes CSV of CRON jobs and saves it to database.';
 
     /**
      * Create a new command instance.
@@ -37,15 +39,22 @@ class processCronJobs extends Command
      * Execute the console command.
      *
      * @return bool
-     * @throws FileNotFoundException
      */
     public function handle(): bool
     {
-        CronJob::query()->truncate();
         $filename = $this->argument('filename');
 
-        $parser = new Parser($filename);
-        $parser->processCronJobs();
+        try {
+            CronJob::query()->truncate();
+            $parser = new Parser($filename);
+            $importedData = $parser->processCronJobs();
+            $this->info($importedData->count() . " cron jobs has been imported");
+        } catch (CronJobSaveFailed) {
+            $this->error("Error while saving data!");
+        } catch (FileNotFoundException) {
+            $this->error("File not found!");
+        }
+
 
         return true;
     }
