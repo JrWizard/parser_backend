@@ -7,9 +7,7 @@ use App\Models\CronJob;
 use App\Models\Custom\Enums\CronJobEmailMe;
 use App\Models\Custom\Enums\CronJobStatus;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use League\Flysystem\FileNotFoundException;
 
 class Parser

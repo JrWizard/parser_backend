@@ -6,7 +6,6 @@ use App\Exceptions\CronJobSaveFailed;
 use App\Models\CronJob;
 use App\Models\Custom\Parser;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
 use League\Flysystem\FileNotFoundException;
 
 class processCronJobs extends Command

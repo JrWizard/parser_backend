@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * Class Document
+ * Class CronJob
  *
  * @property int $id
  * @property int $cron_job_id
@@ -22,7 +22,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property CronJobStatus $status
  * @property CronJobEmailMe $email_me
  * @property Carbon|null $created_at timestamp of create
- * @property Carbon|null $$updated_at timestamp of update
+ * @property Carbon|null $updated_at timestamp of update
  * @property Carbon|null $deleted_at timestamp of delete
  *
  * @package App\Models
