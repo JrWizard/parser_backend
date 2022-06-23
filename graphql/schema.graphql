@@ -1,0 +1,26 @@
+type Query {
+    getCronJobs(orderBy: OrderByClause @orderBy): [CronJob!]! @paginate(defaultCount: 10)
+    getCronJobDetail(id: ID! @eq): CronJob @find
+}
+
+type CronJob {
+    id: ID!
+    name: String!,
+    expression: String!
+    url: String!
+    email_me: EMAIL_ME_ENUM!
+    log: Int!
+    post: String
+    status: STATUS_ENUM!
+    execution_time: Float!
+}
+
+enum EMAIL_ME_ENUM {
+    if_execution_fail
+    never
+}
+
+enum STATUS_ENUM {
+    enabled
+    disabled
+}
