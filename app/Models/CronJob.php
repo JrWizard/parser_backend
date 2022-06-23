@@ -30,9 +30,4 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class CronJob extends Model
 {
     use SoftDeletes;
-
-    protected $casts = [
-        'email_me' => CronJobEmailMe::class,
-        'status' => CronJobStatus::class,
-    ];
 }
